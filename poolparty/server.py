@@ -76,7 +76,7 @@ class Server:
 		iteration = 0
 		try:
 			while self.running:
-				
+				random.shuffle(self.pool)
 				# Listen for incoming clients 
 				try:
 					client, info = sock.accept()
