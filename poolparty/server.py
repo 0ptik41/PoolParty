@@ -63,8 +63,8 @@ class Server:
 				time.sleep(np.random.randint(1,10,1)[0]/10)
 				if other != node:
 					print('[>] Telling %s about %s' % (node, other)) 
-					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
-					c.add_peer(other,node,4242)
+					Thread(target=c.add_peer, args=(other, node, 4242)).start()
+					# c.add_peer(other,node,4242)
 					 
 
 	def run(self):
@@ -89,7 +89,7 @@ class Server:
 					# query peers occassionally 
 					if iteration > 0 and iteration%int(1+jitter*10)==0:
 						for peer in self.pool:
-							# time.sleep(np.random.randint(3,20,1)[0]/10)
+							time.sleep(np.random.randint(3,20,1)[0]/10)
 							# check shares and distribute them
 							peer_files = c.list_files(peer, 4242).split('\n')
 							print('[-] %s has %d shares' % (peer, len(peer_files)))
