@@ -33,6 +33,8 @@ class Node:
 		hashes = {}
 		if not os.path.isdir('.shares/'):
 			os.mkdir('.shares')
+		if not os.path.isdir('received'):
+			os.mkdir('received')
 		else:
 			# os.system('mv received/* .shares/')
 			shares = os.listdir('received/')
