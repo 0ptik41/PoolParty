@@ -116,9 +116,9 @@ def add_peer(peer_ip, rhost, rport):
 	return reply.find('[+]')!=-1 
 
 def file_hash(rfile, rhost, rport):
+	print('[+] Checking %s hashsum for %s' % (rhost, rfile))
 	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	s.connect((rhost, rport))
-	print('[+] Checking %s hashsum for %s' % (rhost, rfile))
 	qstr = 'HashVal :::: %s' % rfile
 	s.send(qstr.encode('utf-8'))
 	res = s.recv(1024).decode('utf-8')

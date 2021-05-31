@@ -121,12 +121,13 @@ class Server:
 
 	def give_hash(self, sock, args):
 		fname = args[0]
-		prinf(fname)
-		if fname not in self.nodes.shares.keys():
-			sock.send(b'[x] Unknown File. Here are my hashes:')
+		if fname not in self.node.shares.keys():
+			hdata = json.dumps(self.node.shares).encode('utf-8')
+			sock.send(b'[x] Unknown File. Here are my hashes:\n'+hdata)
+			print(self.node.shares)
 		else:
-			print(self.nodes.shares[fname])
-			sock.send(bytes(self.nodes.shares[fname]))
+			print(self.node.shares[fname])
+			sock.send(bytes(self.node.shares[fname]))
 		return sock
 
 	def update_code(self, sock, args):
@@ -189,6 +190,7 @@ class Server:
 				print('[!] Malformed API Request')
 				pass
 			if api_fc in self.actions.keys():
+				print('Doing %s(socket, %s)' % (api_fc,params))
 				client = self.actions[api_fc](client, params)
 				client.close()
 				# successful api actions get this client added as peer
