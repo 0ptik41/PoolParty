@@ -83,8 +83,8 @@ class Server:
 					# query peers occassionally 
 					for peer in self.pool:
 						# check shares and distribute them
-						# peer_files = c.list_files(peer, 4242).split('\n')
-						# print('[-] %s has %d shares' % (peer, len(peer_files)))
+						peer_files = c.list_files(peer, 4242).split('\n')
+						print('[-] %s has %d shares' % (peer, len(peer_files)))
 						# TODO: this kinda goes absolutely nuts though lololol 
 						
 				except socket.error:
