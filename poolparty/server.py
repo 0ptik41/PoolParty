@@ -1,6 +1,7 @@
 from threading import Thread 
 from node import Node
 import numpy as np
+import random
 import storage
 import base64 
 import socket
@@ -57,12 +58,14 @@ class Server:
 	def distribute_peer_list(self):
 		for node in self.pool:
 			other_nodes = []
+			random.shuffle(self.pool)
 			for other in self.pool:
+				time.sleep(np.random.randint(1,10,1)[0]/10)
 				if other != node:
 					print('[>] Telling %s about %s' % (node, other)) 
-					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
-					c.add_peer(other,node,4242)
-					time.sleep(np.random.randint(1,10,1)[0]/10) 
+					Thread(target=c.add_peer, args=(other, node, 4242)).start()
+					# c.add_peer(other,node,4242)
+					 
 
 	def run(self):
 		sock = utils.create_listener(self.inbound)
@@ -83,6 +86,7 @@ class Server:
 					self.node.update_shares()
 					# query peers occassionally 
 					for peer in self.pool:
+						time.sleep(np.random.randint(1,10,1)[0]/10)
 						# check shares and distribute them
 						peer_files = c.list_files(peer, 4242).split('\n')
 						print('[-] %s has %d shares' % (peer, len(peer_files)))
