@@ -72,9 +72,9 @@ class Server:
 		fname = args[0].replace('./','').split('/')[-1]
 		print(fname)
 		npackets = int(args[1])
-		if not os.path.isdir('.shares/'):
-			os.mkdir('.shares')
-		if not os.path.isfile('.shares/%s'%fname):
+		if not os.path.isdir('received'):
+			os.mkdir('received')
+		if not os.path.isfile('received/%s'%fname):
 			sock.send(b'[+] Send File OK')
 			print('[-] Attempting to download file %s' % fname)
 			print('[o] Begin receiving %d packets' % npackets)
@@ -83,7 +83,7 @@ class Server:
 				packet = sock.recv(2048).decode('utf-8')
 				data.append(packet)
 			print('[+] Done. Saving Data')
-			open('.shares/%s' % fname,'wb').write(''.join(data).encode('utf-8'))
+			open('received/%s' % fname,'wb').write(''.join(data).encode('utf-8'))
 		else:
 			print(b'[x] Declining to receive %s' % fname)
 			sock.send(b'[!] File Already Exists')

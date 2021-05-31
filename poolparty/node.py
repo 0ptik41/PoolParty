@@ -34,7 +34,6 @@ class Node:
 		if not os.path.isdir('.shares/'):
 			os.mkdir('.shares')
 		else:
-			os.system('mv received/* .shares/')
 			shares = os.listdir('.shares/')
 			for f in shares:
 				fn = '%s/.shares/%s' % (os.getcwd(), f)
