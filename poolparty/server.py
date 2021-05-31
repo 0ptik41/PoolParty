@@ -29,6 +29,9 @@ class Server:
 		self.inbound = port
 		self.running = True
 		self.pool = []
+		if os.path.isfile('.peers'):
+			for p in utils.load_peers():
+				self.pool.append(p)
 		self.run()
 
 	def create_logfile(self):
@@ -67,7 +70,10 @@ class Server:
 						for f in os.listdir('.shares/'):
 							fn = '.shares/%s' % f
 							who = storage.distribute(fn,self.pool)
-							c.send_file(fn,who,4242)
+							try:
+								c.send_file(fn,who,4242)
+							except socket.error:
+								pass
 
 
 				except socket.error:
