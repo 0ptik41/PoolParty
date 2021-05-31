@@ -71,6 +71,15 @@ class Server:
 						for f in os.listdir('.shares/'):
 							fn = '.shares/%s' % f
 							who = storage.distribute(fn,self.pool)
+							full = os.getcwd()+'/%s' % fn
+							if full in self.nodes.shares.keys():
+								hval = self.nodes.shares[full]
+								raw = client.file_hash('null_file',peer,4242)
+								hashes = json.loads(raw.decode('utf-8'))
+								if hval not in hashes.keys():
+									print('[+] Sharing %s with %s' % (fn,peer))
+							else:
+								print('%s not in shares?' % fn)
 							# Check if they already have the file
 							# try:
 							# 	c.send_file(fn,who,4242)
@@ -190,7 +199,6 @@ class Server:
 				print('[!] Malformed API Request')
 				pass
 			if api_fc in self.actions.keys():
-				print('Doing %s(socket, %s)' % (api_fc,params))
 				client = self.actions[api_fc](client, params)
 				client.close()
 				# successful api actions get this client added as peer
