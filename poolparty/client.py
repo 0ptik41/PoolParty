@@ -196,7 +196,7 @@ def main():
 			add_peer(sys.argv[3], rmt, rp)
 
 		if '-hash' in sys.argv:
-			file_hash(sys.argv[3], rmt, rp)
+			print(file_hash(sys.argv[3], rmt, rp))
 
 	elif '-kill-all' in sys.argv:
 			if utils.check_peer_file():

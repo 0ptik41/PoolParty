@@ -122,10 +122,11 @@ class Server:
 	def give_hash(self, sock, args):
 		fname = args[0]
 		if fname not in self.nodes.shares.keys():
-			s.send(b'[x] Unknown File. Here are my hashes:'+bytes(json.dumps(self.node.shares)))
+			sock.send(b'[x] Unknown File. Here are my hashes:'+bytes(json.dumps(self.node.shares)))
 		else:
-			s.send(bytes(self.nodes.shares[fname]))
+			sock.send(bytes(self.nodes.shares[fname]))
 		return sock
+
 	def update_code(self, sock, args):
 		os.system('git fetch')
 		sock.send(b'[+] Latest code pulled from git repo')
