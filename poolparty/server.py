@@ -63,8 +63,8 @@ class Server:
 				time.sleep(np.random.randint(1,10,1)[0]/10)
 				if other != node:
 					print('[>] Telling %s about %s' % (node, other)) 
-					Thread(target=c.add_peer, args=(other, node, 4242)).start()
-					# c.add_peer(other,node,4242)
+					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
+					c.add_peer(other,node,4242)
 					 
 
 	def run(self):
