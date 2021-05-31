@@ -75,9 +75,13 @@ class Server:
 							if full in self.node.shares.keys():
 								hval = self.node.shares[full]
 								raw = c.file_hash('null_file',peer,4242)
-								hashes = json.loads(raw)
-								if hval not in hashes.keys():
-									print('[+] Sharing %s with %s' % (fn,peer))
+								try:
+									hashes = json.loads(raw)
+									if hval not in hashes.keys():
+										print('[+] Sharing %s with %s' % (fn,peer))
+								except json.decoder.JSONDecodeError:
+									print('[x] Cant parse json from %s' % peer)
+									continue
 							else:
 								print('%s not in shares?' % fn)
 							# Check if they already have the file
