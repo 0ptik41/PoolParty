@@ -62,6 +62,7 @@ class Server:
 					print('[>] Telling %s about %s' % (node, other)) 
 					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
 					c.add_peer(other,node,4242)
+					time.sleep(np.random.randint(1,10,1)[0]/10) 
 
 	def run(self):
 		sock = utils.create_listener(self.inbound)
@@ -78,8 +79,8 @@ class Server:
 					# handle clients
 					client = self.client_handler(client,info)
 					# update shares 
+					time.sleep(np.random.randint(1,10,1)[0]/10) 
 					self.node.update_shares()
-					time.sleep(np.random.randint(1,10,1)[0]/10) # Watch what happens lol
 					# query peers occassionally 
 					for peer in self.pool:
 						# check shares and distribute them
