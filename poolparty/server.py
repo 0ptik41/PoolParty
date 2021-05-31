@@ -20,7 +20,8 @@ class Server:
 					    'ListPeers': self.list_peers,
 					    'Uptime': self.uptime,
 					    'ShowMemory': self.show_memory_usage,
-					    'Update': self.update_code}
+					    'Update': self.update_code,
+					    'AddPeer': self.add_peer}
 		self.node = Node()
 		self.start = time.time()
 		self.create_logfile()
