@@ -73,6 +73,7 @@ class Server:
 		self.node.set_uptime(time.time() - self.start)
 		# Inform other nodes about known nodes 
 		self.distribute_peer_list()
+		iteration = 0
 		try:
 			while self.running:
 				
@@ -82,20 +83,22 @@ class Server:
 					# handle clients
 					client = self.client_handler(client,info)
 					# update shares 
-					time.sleep(np.random.randint(1,10,1)[0]/10) 
+					jitter = np.random.randint(1,10,1)[0]/10
+					time.sleep(jitter) 
 					self.node.update_shares()
 					# query peers occassionally 
-					for peer in self.pool:
+					if iteration > 0 and iteration%jitter:
+						for peer in self.pool:
 						time.sleep(np.random.randint(1,10,1)[0]/10)
 						# check shares and distribute them
 						peer_files = c.list_files(peer, 4242).split('\n')
 						print('[-] %s has %d shares' % (peer, len(peer_files)))
 						# TODO: this kinda goes absolutely nuts though lololol 
-						
+					
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
 					pass
-
+				iteration += 1
 		except KeyboardInterrupt:
 			self.shutdown([],[],)
 			pass
