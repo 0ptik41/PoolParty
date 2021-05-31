@@ -93,6 +93,15 @@ def shutdown_peer(rhost, rport):
 	s.send(qstr.encode('utf-8'))
 	return True
 
+def add_peer(peer_ip, rhost, rport):
+	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	s.connect((rhost, rport))
+	qstr = 'AddPeer :::: %s' % peer_ip
+	s.send(qstr.encode('utf-8'))
+	reply = s.recv(1025).decode('utf-8')
+	print(reply)
+	return reply.find('[+]')!=-1 
+
 def usage():
 	print('Usage: python test_client.py [mode]')
 	print('Modes:')
@@ -158,6 +167,8 @@ def main():
 
 		if '-shutdown' in sys.argv:
 			shutdown_peer(rmt, rp)
+		if '-add-peer' in sys.argv:
+			add_peer(sys.argv[3], rmt, rp)
 
 	elif '-kill-all' in sys.argv:
 			if utils.check_peer_file():

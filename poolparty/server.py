@@ -3,6 +3,7 @@ from node import Node
 import base64 
 import socket
 import base64
+import client
 import utils
 import json
 import time
@@ -135,6 +136,16 @@ class Server:
 	def list_peers(self, sock, args):
 		result = '\n'.join(self.pool)
 		sock.send(result.encode('utf-8'))
+		return sock
+
+	def add_peer(self, sock, args):
+		addr = args[0]
+		if addr not in self.pool:
+			self.pool.append(addr)
+			print('[+] Adding %s to pool' % addr)
+			sock.send(b'[+] Peer Added')
+		else:
+			sock.send(b'[x] Not Added')
 		return sock
 
 	def client_handler(self, client, info):
