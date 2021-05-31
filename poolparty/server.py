@@ -82,7 +82,7 @@ class Server:
 					for peer in self.pool:
 						# check shares and distribute them
 						# peer_files = c.list_files(peer, 4242).split('\n')
-						print('[-] %s has %d shares' % (peer, len(peer_files)))
+						# print('[-] %s has %d shares' % (peer, len(peer_files)))
 						# TODO: this kinda goes absolutely nuts though lololol 
 						# time.sleep(0.1) # Watch what happens lol
 				except socket.error:
