@@ -78,8 +78,8 @@ class Server:
 			theirs = []
 			for f in peer_files:
 					theirs.append(c.file_hash(f,peer,4242))
-			for myf in self.shares.keys():
-				if self.shares[myf] not in theirs:
+			for myf in self.node.shares.keys():
+				if self.node.shares[myf] not in theirs:
 					c.send(myf,peer,4242)
 
 	def run(self):
