@@ -60,7 +60,7 @@ class Server:
 				if other != node:
 					print('[>] Telling %s about %s' % (node, other)) 
 					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
-					# c.add_peer(other,node,4242)
+					c.add_peer(other,node,4242)
 
 	def run(self):
 		sock = utils.create_listener(self.inbound)
@@ -81,7 +81,7 @@ class Server:
 					# query peers occassionally 
 					for peer in self.pool:
 						# check shares and distribute them
-						peer_files = c.list_files(peer, 4242).split('\n')
+						# peer_files = c.list_files(peer, 4242).split('\n')
 						print('[-] %s has %d shares' % (peer, len(peer_files)))
 						# TODO: this kinda goes absolutely nuts though lololol 
 						# time.sleep(0.1) # Watch what happens lol
