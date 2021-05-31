@@ -52,12 +52,24 @@ class Server:
 		self.running = False
 		return s
 
+
+	def distribute_peer_list(self):
+		for node in self.pool:
+			other_nodes = []
+			for other in self.pool:
+				if other != node:
+					print('[>] Telling %s about %s' % (node, other)) 
+					c.add_peer(other, node, 4242)
+
+
 	def run(self):
 		sock = utils.create_listener(self.inbound)
 		print('[+] Joining Pool \t|| %s - %s||' % (self.sdate, self.stime))
 		self.node.set_uptime(time.time() - self.start)
 		try:
 			while self.running:
+				# Inform other nodes about known nodes 
+				self.distribute_peer_list()
 				# Listen for incoming clients 
 				try:
 					client, info = sock.accept()
@@ -68,29 +80,8 @@ class Server:
 					# query peers occassionally 
 					for peer in self.pool:
 						# check shares and distribute them
-						for f in os.listdir('.shares/'):
-							fn = '.shares/%s' % f
-							who = storage.distribute(fn,self.pool)
-							full = os.getcwd()+'/%s' % fn
-							if full in self.node.shares.keys():
-								hval = self.node.shares[full]
-								raw = c.file_hash('null_file',peer,4242)
-								try:
-									hashes = json.loads(raw)
-									if hval not in hashes.keys():
-										print('[+] Sharing %s with %s' % (fn,peer))
-								except json.decoder.JSONDecodeError:
-									print('[x] Cant parse json from %s' % peer)
-									continue
-							else:
-								print('%s not in shares?' % fn)
-							# Check if they already have the file
-							# try:
-							# 	c.send_file(fn,who,4242)
-							# except socket.error:
-							# 	pass
-
-
+						peer_files = c.list_files(peer, 4242).split('\n')
+						print('[-] %s has %d shares' % (peer, len(peer_files)))
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
 					pass
