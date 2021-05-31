@@ -108,8 +108,8 @@ class Server:
 		if os.path.isdir('received'):
 			for f in os.listdir('received'):
 				shares.append('received/%s'%f)
-		if os.path.isdir('shared'):
-			for s in os.listdir('shared'):
+		if os.path.isdir('shares'):
+			for s in os.listdir('.shares'):
 				shares.append('shared/%'%s)
 		if os.path.isdir('.log'):
 			for l in os.listdir('.log/'):

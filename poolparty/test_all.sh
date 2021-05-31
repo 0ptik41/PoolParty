@@ -10,8 +10,14 @@ if [ $hasPeers -eq 1 ]; then
 	echo '[!] Missing Peers'
 	exit
 fi
-
-cat .peers | while read n; do
-	python3 client.py $n $1
-done
+if [ $# -eq 1 ]; then 
+	cat .peers | while read n; do
+		python3 client.py $n $1
+	done
+fi
+if [ $# -eq 2 ]; then 
+	cat .peers | while read n; do
+		python3 client.py $n $1 $2
+	done
+fi
 #EOF
