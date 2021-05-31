@@ -1,5 +1,6 @@
 from threading import Thread 
 from node import Node
+import storage
 import base64 
 import socket
 import base64
@@ -60,6 +61,14 @@ class Server:
 					client = self.client_handler(client,info)
 					# update shares 
 					self.node.update_shares()
+					# query peers occassionally 
+					if int(self.start - time.time())%30==0:
+						for peer in self.pool[1:]:
+							# check shares and distribute them
+							for f in os.listdir('.shares/'):
+								fn = './shares/%s' % f
+								who = storage.distribute(fn,self.pool)
+								client.send_file(fn,who,4242)
 
 
 				except socket.error:
