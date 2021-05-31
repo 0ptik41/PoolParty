@@ -59,7 +59,7 @@ class Server:
 			for other in self.pool:
 				if other != node:
 					print('[>] Telling %s about %s' % (node, other)) 
-					c.add_peer(other, node, 4242)
+					Thread(target=c.add_peer, args=(other, node, 4242)).start()
 
 
 	def run(self):

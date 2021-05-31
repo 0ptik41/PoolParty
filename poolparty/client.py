@@ -159,8 +159,6 @@ def check_uptimes(nodes):
 			pass
 	return results
 
-
-
 def main():
 	rp = 4242
 	# Check args in
