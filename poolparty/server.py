@@ -95,7 +95,7 @@ class Server:
 		return sock
 
 	def update_code(self, sock, args):
-		os.system('git pull')
+		os.system('git fetch')
 		sock.send(b'[+] Latest code pulled from git repo')
 		return sock
 
