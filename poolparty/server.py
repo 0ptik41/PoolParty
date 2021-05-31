@@ -75,7 +75,7 @@ class Server:
 							if full in self.node.shares.keys():
 								hval = self.node.shares[full]
 								raw = c.file_hash('null_file',peer,4242)
-								hashes = json.loads(raw.decode('utf-8'))
+								hashes = json.loads(raw)
 								if hval not in hashes.keys():
 									print('[+] Sharing %s with %s' % (fn,peer))
 							else:
