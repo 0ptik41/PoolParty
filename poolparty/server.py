@@ -1,5 +1,6 @@
 from threading import Thread 
 from node import Node
+import numpy as np
 import storage
 import base64 
 import socket
@@ -78,13 +79,14 @@ class Server:
 					client = self.client_handler(client,info)
 					# update shares 
 					self.node.update_shares()
+					time.sleep(np.random.randint(1,10,1)[0]/10) # Watch what happens lol
 					# query peers occassionally 
 					for peer in self.pool:
 						# check shares and distribute them
 						# peer_files = c.list_files(peer, 4242).split('\n')
 						# print('[-] %s has %d shares' % (peer, len(peer_files)))
 						# TODO: this kinda goes absolutely nuts though lololol 
-						time.sleep(0.1) # Watch what happens lol
+						
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
 					pass
