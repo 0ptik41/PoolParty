@@ -121,6 +121,7 @@ class Server:
 
 	def give_hash(self, sock, args):
 		fname = args[0]
+		prinf(fname)
 		if fname not in self.nodes.shares.keys():
 			sock.send(b'[x] Unknown File. Here are my hashes:')
 		else:

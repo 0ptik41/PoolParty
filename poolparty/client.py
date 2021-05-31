@@ -119,7 +119,7 @@ def file_hash(rfile, rhost, rport):
 	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	s.connect((rhost, rport))
 	print('[+] Checking %s hashsum for %s' % (rhost, rfile))
-	qstr = 'HashVal :::: %s please?' % rfile
+	qstr = 'HashVal :::: %s' % rfile
 	s.send(qstr.encode('utf-8'))
 	res = s.recv(1024).decode('utf-8')
 	s.close()
