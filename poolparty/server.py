@@ -193,6 +193,7 @@ class Server:
 				self.pool.append(info[0])
 				self.pool = list(set(self.pool))
 		except:
+			print('Bad Request: %s' % raw_request)
 			client.send(b'[!] Unable to process request')
 		return client
 
