@@ -140,7 +140,6 @@ class Server:
 			try:
 				api_fc = raw_request.split(' :::: ')[0]
 				params = raw_request.split(' :::: ')[1].split(',')
-				print(api_fc in self.actions.keys())
 			except IndexError:
 				print('[!] Malformed API Request')
 				pass
@@ -149,6 +148,7 @@ class Server:
 				client.close()
 				# successful api actions get this client added as peer
 				self.pool.append(info[0])
+				self.pool = list(set(self.pool))
 		except:
 			client.send(b'[!] Unable to process request')
 		return client

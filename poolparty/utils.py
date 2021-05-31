@@ -74,15 +74,14 @@ def create_listener(port):
 		pass
 	return s
 
-def load_nodes():
-	node_data = {}
-	if not os.path.isdir('.local'):
-		os.mkdir('.local')
-		print('[!] No Node Data Found')
-		return {}
-	else:
-		for nodeset in os.listdir('.local'):
-			node_settings = json.loads(os.getcwd()+'/.local/'+nodeset)
-			node_data[nodeset.split('.node')[0]] = node_settings
-		return node_data
+def check_peer_file():
+	found = True
+	if not os.path.isfile('.peers'):
+		print('[!] You dont have any peers')
+		found = False
+	return found
 
+def load_peers():
+	peers = open('.peers','rb').read().decode('utf-8').split('\n')
+	peers.pop(-1)
+	return peers

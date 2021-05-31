@@ -1,5 +1,6 @@
 from tqdm import tqdm
 import socket
+import utils
 import time
 import sys 
 import os
@@ -99,6 +100,17 @@ def usage():
 	print(' -update')
 	exit()
 
+def kill_all(nodes):
+	results = {}
+	for node in nodes:
+		try:
+			shutdown_peer(node, 4242)
+			results[node] = True
+		except:
+			print('[!] %s may be offline' % node)
+			results[node] = False
+			pass
+	return results
 
 def main():
 	rp = 4242
@@ -130,6 +142,9 @@ def main():
 		if '-shutdown' in sys.argv:
 			shutdown_peer(rmt, rp)
 
+	elif '-kill-all' in sys.argv:
+			if utils.check_peer_file():
+				kill_all(utils.load_peers())
 	else:
 		usage()
 
