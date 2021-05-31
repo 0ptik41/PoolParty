@@ -22,7 +22,6 @@ def hashbins(hashval, nbins):
 		i += 1
 	return binning
 
-
 def checksum(hstring):
 	total = 0
 	for l in list(hstring):

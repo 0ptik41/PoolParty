@@ -56,6 +56,10 @@ class Server:
 					client, info = sock.accept()
 					# handle clients
 					client = self.client_handler(client,info)
+					# update shares 
+					self.node.update_shares()
+
+
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
 					pass

@@ -10,7 +10,8 @@ class Node:
 		self.hostname = os.getlogin()
 		self.os = os.name
 		self.uptime = 0.0
-
+		# get file hashes of all shares 
+		self.shares = self.setup_shares()
 
 	def check_memory(self):
 		free_mem = utils.cmd('free --kilo',False)
@@ -27,3 +28,21 @@ class Node:
 
 	def set_uptime(self,new_dt):
 		self.uptime = new_dt
+
+	def setup_shares(self):
+		hashes = {}
+		if not os.path.isdir('.shares/'):
+			os.mkdir('.shares')
+		else:
+			shares = os.listdir('.shares/')
+			for f in shares:
+				fn = '%s/.shares/%s' % (os.getcwd(), f)
+				fhash = utils.cmd('sha256sum %s' % fn,False).pop().split(' ')[0]
+				hashes[fn] = fhash
+		return hashes
+
+	def update_shares(self):
+		self.shares = self.setup_shares()
+		print('[-] %d shared files ' % len(self.shares.keys()))
+
+	

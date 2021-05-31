@@ -112,6 +112,19 @@ def kill_all(nodes):
 			pass
 	return results
 
+def check_uptimes(nodes):
+	results = {}
+	for node in nodes:
+		try:
+			results[node] = uptime(node, 4242)
+		except:
+			print('[!] %s may be offline' % node)
+			results[node] = []
+			pass
+	return results
+
+
+
 def main():
 	rp = 4242
 	# Check args in
