@@ -69,7 +69,7 @@ class Server:
 			pass
 
 	def recv_file(self, sock, args):
-		fname = args[0]
+		fname = args[0].split('/')[-1].replace(' ','')
 		npackets = int(args[1])
 		if not os.path.isdir('received'):
 			os.mkdir('received')
