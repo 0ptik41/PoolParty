@@ -35,9 +35,9 @@ class Node:
 			os.mkdir('.shares')
 		else:
 			# os.system('mv received/* .shares/')
-			shares = os.listdir('.shares/')
+			shares = os.listdir('received/')
 			for f in shares:
-				fn = '%s/.shares/%s' % (os.getcwd(), f)
+				fn = '%s/received/%s' % (os.getcwd(), f)
 				fhash = utils.cmd('sha256sum %s' % fn,False).pop().split(' ')[0]
 				hashes[fn] = fhash
 		return hashes
@@ -45,5 +45,5 @@ class Node:
 	def update_shares(self):
 		self.shares = self.setup_shares()
 		print('[-] %d shared files ' % len(self.shares.keys()))
-		
+
 	
