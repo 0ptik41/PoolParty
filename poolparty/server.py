@@ -122,8 +122,9 @@ class Server:
 	def give_hash(self, sock, args):
 		fname = args[0]
 		if fname not in self.nodes.shares.keys():
-			sock.send(b'[x] Unknown File. Here are my hashes:'+bytes(json.dumps(self.node.shares)))
+			sock.send(b'[x] Unknown File. Here are my hashes:')
 		else:
+			print(self.nodes.shares[fname])
 			sock.send(bytes(self.nodes.shares[fname]))
 		return sock
 
@@ -192,6 +193,8 @@ class Server:
 				# successful api actions get this client added as peer
 				self.pool.append(info[0])
 				self.pool = list(set(self.pool))
+			else:
+				print('Unknown request: %s' % raw_request)
 		except:
 			print('Bad Request: %s' % raw_request)
 			client.send(b'[!] Unable to process request')
