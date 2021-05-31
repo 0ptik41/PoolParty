@@ -74,6 +74,20 @@ def list_peers(rhost, rport):
 	s.send(qstr.encode('utf-8'))
 	return s.recv(1024).decode('utf-8')
 
+def update_code(rhost, rport):
+	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	s.connect((rhost, rport))
+	qstr = 'Update :::: Please?'
+	s.send(qstr.encode('utf-8'))
+	return s.recv(1024).decode('utf-8')
+
+def shutdown_peer(rhost, rport):
+	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	s.connect((rhost, rport))
+	qstr = 'Shutdown :::: Now'
+	s.send(qstr.encode('utf-8'))
+	return True
+
 def usage():
 	print('Usage: python test_client.py [mode]')
 	print('Modes:')
@@ -82,23 +96,21 @@ def usage():
 	print(' -memory')
 	print(' -delete')
 	print(' -send')
+	print(' -update')
 	exit()
 
 
 def main():
-	# Constants for Debuggin
-	test_file = 'test.txt'
-	rmt = '192.168.1.164'
 	rp = 4242
 	# Check args in
-	if len(sys.argv) > 1:
-		
-		if '-send' in sys.argv and os.path.isfile(sys.argv[2]):
-			test_file = sys.argv[2]
+	if len(sys.argv) > 2:
+		rmt = sys.argv[1]
+		if '-send' in sys.argv and os.path.isfile(sys.argv[3]):
+			test_file = sys.argv[3]
 			send_file(test_file,rmt,rp)
 
 		if '-delete' in sys.argv:
-			delete_file(sys.argv[2],rmt,rp)
+			delete_file(sys.argv[3],rmt,rp)
 
 		if '-list-files' in sys.argv:
 			print(list_files(rmt, rp))
@@ -111,6 +123,13 @@ def main():
 
 		if '-list-peers' in sys.argv:
 			print(list_peers(rmt, rp))
+
+		if '-update' in sys.argv:
+			print(update_code(rmt, rp))
+
+		if '-shutdown' in sys.argv:
+			shutdown_peer(rmt, rp)
+
 	else:
 		usage()
 

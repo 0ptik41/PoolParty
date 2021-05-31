@@ -18,7 +18,8 @@ class Server:
 					    'ListFiles': self.list_files,
 					    'ListPeers': self.list_peers,
 					    'Uptime': self.uptime,
-					    'ShowMemory': self.show_memory_usage}
+					    'ShowMemory': self.show_memory_usage,
+					    'Update': self.update_code}
 		self.node = Node()
 		self.start = time.time()
 		self.create_logfile()
@@ -91,6 +92,11 @@ class Server:
 			print('[-] %s was requested to be deleted' % fname)
 			os.remove(fname)
 			sock.send(b'[+] %s was deleted' % fname)
+		return sock
+
+	def update_code(self, sock, args):
+		os.system('git pull')
+		sock.send(b'[+] Latest code pulled from git repo')
 		return sock
 
 	def list_files(self, sock, args):
