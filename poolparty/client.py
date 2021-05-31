@@ -37,7 +37,9 @@ def send_file(fname, rhost, rport):
 			s.send(p)
 			progress.update(1)
 		progress.close()
-	print('[+] Finished')
+		print('[+] Finished')
+	else:
+		print('[x] Share was rejected')
 	time.sleep(1)
 	s.close()
 
@@ -48,6 +50,7 @@ def delete_file(fname, rhost, rport):
 	qstr = 'Delete :::: %s' % fname
 	s.send(qstr.encode('utf-8'))
 	deleted = s.recv(1024).decode('utf-8').find('[+]') >= 0
+	s.close()
 	return deleted
 
 def list_files(rhost,rport):
@@ -56,6 +59,7 @@ def list_files(rhost,rport):
 	qstr = 'ListFiles :::: Please?'
 	s.send(qstr.encode('utf-8'))
 	rmt_files = s.recv(1024).decode('utf-8')
+	s.close()
 	return rmt_files
 
 def uptime(rhost, rport):
@@ -63,34 +67,43 @@ def uptime(rhost, rport):
 	s.connect((rhost, rport))
 	qstr = 'Uptime :::: Please?'
 	s.send(qstr.encode('utf-8'))
-	return s.recv(1025).decode('utf-8') 
+	res = s.recv(1025).decode('utf-8') 
+	s.close()
+	return res
 
 def check_memory(rhost, rport):
 	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	s.connect((rhost, rport))
 	qstr = 'ShowMemory :::: Please?'
 	s.send(qstr.encode('utf-8'))
-	return s.recv(1024).decode('utf-8')
+	res = s.recv(1024).decode('utf-8')
+	s.close()
+	return res
 
 def list_peers(rhost, rport):
 	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	s.connect((rhost, rport))
 	qstr = 'ListPeers :::: Please?'
 	s.send(qstr.encode('utf-8'))
-	return s.recv(1024).decode('utf-8')
+	res = s.recv(1024).decode('utf-8')
+	s.close()
+	return res
 
 def update_code(rhost, rport):
 	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	s.connect((rhost, rport))
 	qstr = 'Update :::: Please?'
 	s.send(qstr.encode('utf-8'))
-	return s.recv(1024).decode('utf-8')
+	res = s.recv(1024).decode('utf-8')
+	s.close()
+	return res
 
 def shutdown_peer(rhost, rport):
 	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 	s.connect((rhost, rport))
 	qstr = 'Shutdown :::: Now'
 	s.send(qstr.encode('utf-8'))
+	s.close()
 	return True
 
 def add_peer(peer_ip, rhost, rport):
@@ -99,8 +112,18 @@ def add_peer(peer_ip, rhost, rport):
 	qstr = 'AddPeer :::: %s' % peer_ip
 	s.send(qstr.encode('utf-8'))
 	reply = s.recv(1025).decode('utf-8')
-	print(reply)
+	print(reply); s.close()
 	return reply.find('[+]')!=-1 
+
+def file_hash(rfile, rhost, rport):
+	s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+	s.connect((rhost, rport))
+	print('[+] Checking %s hashsum for %s' % (rhost, rfile))
+	qstr = 'HashVal :::: %s' % rfile
+	s.send(qstr.encode('utf-8'))
+	res = s.recv(1024).decode('utf-8')
+	s.close()
+	return res
 
 def usage():
 	print('Usage: python test_client.py [mode]')
@@ -143,6 +166,7 @@ def main():
 	# Check args in
 	if len(sys.argv) > 2:
 		rmt = sys.argv[1]
+
 		if '-send' in sys.argv and os.path.isfile(sys.argv[3]):
 			test_file = sys.argv[3]
 			send_file(test_file,rmt,rp)
@@ -167,6 +191,7 @@ def main():
 
 		if '-shutdown' in sys.argv:
 			shutdown_peer(rmt, rp)
+
 		if '-add-peer' in sys.argv:
 			add_peer(sys.argv[3], rmt, rp)
 

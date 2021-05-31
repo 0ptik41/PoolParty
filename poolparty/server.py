@@ -70,10 +70,11 @@ class Server:
 						for f in os.listdir('.shares/'):
 							fn = '.shares/%s' % f
 							who = storage.distribute(fn,self.pool)
-							try:
-								c.send_file(fn,who,4242)
-							except socket.error:
-								pass
+							# Check if they already have the file
+							# try:
+							# 	c.send_file(fn,who,4242)
+							# except socket.error:
+							# 	pass
 
 
 				except socket.error:
@@ -117,6 +118,13 @@ class Server:
 			sock.send(b'[+] %s was deleted' % fname)
 		return sock
 
+	def give_hash(self, sock, args):
+		fname = args[0]
+		if fname not in self.nodes.shares.keys():
+			s.send(b'[x] Unknown File. Here are my hashes:'+bytes(json.dumps(self.node.shares)))
+		else:
+			s.send(bytes(self.nodes.shares[fname]))
+		return sock
 	def update_code(self, sock, args):
 		os.system('git fetch')
 		sock.send(b'[+] Latest code pulled from git repo')

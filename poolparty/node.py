@@ -37,9 +37,12 @@ class Node:
 			os.mkdir('received')
 		else:
 			# os.system('mv received/* .shares/')
-			shares = os.listdir('received/')
-			for f in shares:
+			for f in os.listdir('received/'):
 				fn = '%s/received/%s' % (os.getcwd(), f)
+				fhash = utils.cmd('sha256sum %s' % fn,False).pop().split(' ')[0]
+				hashes[fn] = fhash
+			for fl in os.listdir('.shares'):
+				fn = '%s/.shares/%s' % (os.getcwd(), fl)
 				fhash = utils.cmd('sha256sum %s' % fn,False).pop().split(' ')[0]
 				hashes[fn] = fhash
 		return hashes
