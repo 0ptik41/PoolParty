@@ -87,7 +87,7 @@ class Server:
 					time.sleep(jitter) 
 					self.node.update_shares()
 					# query peers occassionally 
-					if iteration > 0 and iteration%jitter:
+					if iteration > 0 and iteration%jitter==0:
 						for peer in self.pool:
 							time.sleep(np.random.randint(1,10,1)[0]/10)
 							# check shares and distribute them
