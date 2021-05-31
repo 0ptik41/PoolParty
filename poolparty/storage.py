@@ -30,6 +30,9 @@ def checksum(hstring):
 	return total
 
 def distribute(file,nodes):
-	hval = hashstring(open(file,'rb').read())
-	bins = hashbins(hval, len(nodes))
-	return nodes[np.nonzero(np.array(bins==np.max(bins),dtype=np.int))[0][0]]
+	if os.path.isfile(file):
+		hval = hashstring(open(file,'rb').read())
+		bins = hashbins(hval, len(nodes))
+		return nodes[np.nonzero(np.array(bins==np.max(bins),dtype=np.int))[0][0]]
+	else:
+		return ''

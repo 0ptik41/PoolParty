@@ -65,7 +65,7 @@ class Server:
 					for peer in self.pool[1:]:
 						# check shares and distribute them
 						for f in os.listdir('.shares/'):
-							fn = './shares/%s' % f
+							fn = '.shares/%s' % f
 							who = storage.distribute(fn,self.pool)
 							client.send_file(fn,who,4242)
 
@@ -84,6 +84,7 @@ class Server:
 		npackets = int(args[1])
 		if not os.path.isdir('received'):
 			os.mkdir('received')
+			os.mkdir('.shares/')
 		if not os.path.isfile('received/%s'%fname):
 			sock.send(b'[+] Send File OK')
 			print('[-] Attempting to download file %s' % fname)
