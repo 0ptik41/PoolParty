@@ -60,16 +60,17 @@ class Server:
 				if other != node:
 					print('[>] Telling %s about %s' % (node, other)) 
 					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
-					c.add_peer(other,node,4242)
+					# c.add_peer(other,node,4242)
 
 	def run(self):
 		sock = utils.create_listener(self.inbound)
 		print('[+] Joining Pool \t|| %s - %s||' % (self.sdate, self.stime))
 		self.node.set_uptime(time.time() - self.start)
+		# Inform other nodes about known nodes 
+		self.distribute_peer_list()
 		try:
 			while self.running:
-				# Inform other nodes about known nodes 
-				self.distribute_peer_list()
+				
 				# Listen for incoming clients 
 				try:
 					client, info = sock.accept()
