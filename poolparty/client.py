@@ -1,4 +1,8 @@
-from tqdm import tqdm
+try:
+	from tqdm import tqdm
+except ImportError:
+	print('\033[31m[*] Missing tqdm\033[0m')
+	pass
 import socket
 import utils
 import time
