@@ -65,7 +65,7 @@ class Server:
 					# update shares 
 					self.node.update_shares()
 					# query peers occassionally 
-					for peer in self.pool[1:]:
+					for peer in self.pool:
 						# check shares and distribute them
 						for f in os.listdir('.shares/'):
 							fn = '.shares/%s' % f
