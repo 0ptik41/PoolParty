@@ -4,7 +4,7 @@ import storage
 import base64 
 import socket
 import base64
-import client
+import client as c
 import utils
 import json
 import time
@@ -67,7 +67,7 @@ class Server:
 						for f in os.listdir('.shares/'):
 							fn = '.shares/%s' % f
 							who = storage.distribute(fn,self.pool)
-							client.send_file(fn,who,4242)
+							c.send_file(fn,who,4242)
 
 
 				except socket.error:
