@@ -89,11 +89,11 @@ class Server:
 					# query peers occassionally 
 					if iteration > 0 and iteration%jitter:
 						for peer in self.pool:
-						time.sleep(np.random.randint(1,10,1)[0]/10)
-						# check shares and distribute them
-						peer_files = c.list_files(peer, 4242).split('\n')
-						print('[-] %s has %d shares' % (peer, len(peer_files)))
-						# TODO: this kinda goes absolutely nuts though lololol 
+							time.sleep(np.random.randint(1,10,1)[0]/10)
+							# check shares and distribute them
+							peer_files = c.list_files(peer, 4242).split('\n')
+							print('[-] %s has %d shares' % (peer, len(peer_files)))
+							# TODO: this kinda goes absolutely nuts though lololol 
 					
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
