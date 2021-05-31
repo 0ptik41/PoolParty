@@ -102,7 +102,7 @@ class Server:
 			for s in os.listdir('shared'):
 				shares.append('shared/%'%s)
 		if os.path.isdir('.log'):
-			for l in os.list('.log/'):
+			for l in os.listdir('.log/'):
 				shares.append('log/%s' % l)
 		result = '\n'.join(shares)
 		sock.send(result.encode('utf-8'))

@@ -1,4 +1,3 @@
-from dotenv import load_dotenv
 from threading import Thread
 import server
 import utils
@@ -6,9 +5,6 @@ import time
 import json
 import sys 
 import os
-
-load_dotenv()
-
 
 
 def main():
