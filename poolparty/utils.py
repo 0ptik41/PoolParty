@@ -84,4 +84,5 @@ def check_peer_file():
 def load_peers():
 	peers = open('.peers','rb').read().decode('utf-8').split('\n')
 	peers.pop(-1)
+	print('[*] %d Peers Found' % len(peers))
 	return peers
