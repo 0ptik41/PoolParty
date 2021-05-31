@@ -93,8 +93,9 @@ class Server:
 			while len(data)<npackets:
 				packet = sock.recv(2048).decode('utf-8')
 				data.append(packet)
-			print('[+] Done. Saving Data')
 			open('received/%s' % fname,'wb').write(''.join(data).encode('utf-8'))
+			sz = os.getsize('received/%s' % fname)
+			print('[+] Done. Saving Data [%d bytes]' % sz)
 		else:
 			print(b'[x] Declining to receive %s' % fname)
 			sock.send(b'[!] File Already Exists')
