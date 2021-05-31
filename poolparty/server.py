@@ -72,8 +72,8 @@ class Server:
 							fn = '.shares/%s' % f
 							who = storage.distribute(fn,self.pool)
 							full = os.getcwd()+'/%s' % fn
-							if full in self.nodes.shares.keys():
-								hval = self.nodes.shares[full]
+							if full in self.node.shares.keys():
+								hval = self.node.shares[full]
 								raw = client.file_hash('null_file',peer,4242)
 								hashes = json.loads(raw.decode('utf-8'))
 								if hval not in hashes.keys():
