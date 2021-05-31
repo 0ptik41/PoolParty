@@ -89,12 +89,19 @@ class Server:
 					# query peers occassionally 
 					if iteration > 0 and iteration%int(1+jitter*10)==0:
 						for peer in self.pool:
-							time.sleep(np.random.randint(3,20,1)[0]/10)
+							
 							# check shares and distribute them
 							peer_files = c.list_files(peer, 4242).split('\n')
 							print('[-] %s has %d shares' % (peer, len(peer_files)))
 							# TODO: this kinda goes absolutely nuts though lololol 
-					
+							time.sleep(np.random.randint(3,20,1)[0]/10)
+							theirs = []
+							for f in peer_files:
+									theirs.append(c.file_hash(f,peer,4242))
+							for myf in self.shares.keys():
+								if self.shares[myf] not in theirs:
+									c.send(myf,peer,4242)
+
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
 					try:
