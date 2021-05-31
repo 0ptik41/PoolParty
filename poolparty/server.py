@@ -103,7 +103,7 @@ class Server:
 					self.node.update_shares()
 					# query peers occassionally 
 					if iteration > 0 and iteration%int(1+jitter*10)==0:
-
+						self.distribute_shares()
 
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
