@@ -76,8 +76,7 @@ class Server:
 		sock = utils.create_listener(self.inbound)
 		print('[+] Joining Pool \t|| %s - %s||' % (self.sdate, self.stime))
 		self.node.set_uptime(time.time() - self.start)
-		# Inform other nodes about known nodes 
-		self.distribute_peer_list()
+		self.node.update_shares()
 		iteration = 0
 		try:
 			while self.running:
@@ -90,7 +89,10 @@ class Server:
 					# update shares 
 					jitter = np.random.randint(1,10,1)[0]/10
 					time.sleep(jitter) 
-					self.node.update_shares()
+					if iteration > 1 and iteration%5==0;
+						self.node.update_shares()
+						# Inform other nodes about known nodes 
+						self.distribute_peer_list()
 					
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
