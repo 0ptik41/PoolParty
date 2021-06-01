@@ -7,8 +7,9 @@ import os
 
 class Node:
 	backend = 2424
-	def __init__(self, nodes):
-		self.actions = {}
+	def __init__(self, frontend, nodes):
+		self.actions = {'SharePeers', frontend.distribute_peer_list,
+					    'AddPeer', frontend.add_peer}
 		# 'SharePeers': self.share_peers,
 		# 				'ShareFiles': self.share_files,
 		self.peers = nodes
@@ -19,9 +20,9 @@ class Node:
 		self.running = True
 		# get file hashes of all shares 
 		self.shares = self.setup_shares()
-		# self.listener = Thread(target=self.run_backend,())
-		# self.listener.setDaemon(True)
-		# self.listener.start()
+		self.listener = Thread(target=self.run_backend,args=())
+		self.listener.setDaemon(True)
+		self.listener.start()
 
 	def check_memory(self):
 		free_mem = utils.cmd('free --kilo',False)
@@ -76,17 +77,15 @@ class Node:
 			self.running = False
 			pass
 
-	# def share_peers(self):
-
-
-	# def share_files(self):
-
 def handler(node, addr, sock):
 	try:
 		raw_request = client.recv(1024).decode('utf-8')
 		try:
 			api = raw_request.split(' :::: ')[0]
 			params = raw_request.split(' :::: ')[1].split(',')
+			if api in self.actions.keys():
+				client = self.actions[api](addr, params)
+				client.close()
 		except IndexError:
 			print('[!] Bad Api Request')
 			client.close()
