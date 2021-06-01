@@ -80,7 +80,9 @@ class Server:
 			for myf in self.node.shares.keys():
 				if self.node.shares[myf] not in theirs:
 					time.sleep(np.random.randint(1,10,1)[0]/10)
-					client.send(myf,peer,4242)
+					s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+					s.send(myf,peer,4242)
+					s.close()
 
 	def run(self):
 		sock = utils.create_listener(self.inbound)
