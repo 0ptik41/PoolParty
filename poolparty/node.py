@@ -92,7 +92,7 @@ class Node:
 		return sock
 
 	def hashdump(self, sock, args):
-		hdata = json.dump(self.shares).decode('utf-8')
+		hdata = json.dumps(self.shares).decode('utf-8')
 		sock.send(b'%s' % hdata)
 		return sock
 
@@ -105,6 +105,7 @@ class Node:
 			try:
 				rmt_files = json.loads(s.recv(2048).encode('utf-8'))
 			except ValueError:
+				rmt_files = {}
 				pass
 			for rf in rmt_files:
 				rhash = rmt_files[rf]
