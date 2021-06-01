@@ -14,7 +14,7 @@ class Node:
 		self.running = True
 		# get file hashes of shares 
 		self.shares = self.setup_shares()
-		serve = Thread(target=self.run_backend, args=(,))
+		serve = Thread(target=self.run_backend, args=())
 		serve.setDaemon(True)
 		serve.start()
 
