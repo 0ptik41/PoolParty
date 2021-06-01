@@ -71,11 +71,7 @@ class Server:
 						print('[!] Error adding peer')
 						pass
 	
-	def listen(self,sock):
-		client, info = sock.accept()
-		# handle clients
-		client = self.client_handler(client,info)
-		client.close()
+		
 
 
 	def run(self):
@@ -89,9 +85,10 @@ class Server:
 				random.shuffle(self.pool)
 				# Listen for incoming clients 
 				try:
-					worker = Thread(target=self.listen, args=(sock,))
-					worker.setDaemon(True)
-					worker.start()
+					client, info = sock.accept()
+					# handle clients
+					client = self.client_handler(client,info)
+					client.close()
 					# update shares 
 					self.distribute_peer_list()
 					self.node.distribute_shared_files()
