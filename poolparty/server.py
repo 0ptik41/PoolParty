@@ -102,7 +102,7 @@ class Server:
 					time.sleep(jitter) 
 					self.node.update_shares()
 					# query peers occassionally 
-					if iteration > 0 and iteration%int(jitter)==0:
+					if iteration > 0 and iteration%int(1+jitter)==0:
 						self.distribute_shares()
 
 				except socket.error:
