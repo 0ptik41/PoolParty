@@ -9,7 +9,8 @@ class Node:
 	inbound = 2424
 	def __init__(self, peers):
 		self.pool = peers
-		self.actions = {'AddPeer': self.add_peer}
+		self.actions = {'AddPeer': self.add_peer,
+						'HashVal:' self.hashdump}
 		self.memory = self.check_memory()
 		self.hostname = os.getlogin()
 		self.os = os.name
@@ -73,7 +74,7 @@ class Node:
 					self.shares = self.setup_shares()
 					# check if peers have the same shares
 				except socket.error:
-					print('[!!] Connection error with %s' % i)
+					print('[!!] Connection error with %s')
 					pass
 				iteration += 1
 		except KeyboardInterrupt:
@@ -99,9 +100,12 @@ class Node:
 		for peer in self.pool:
 			# Get files from this peer
 			s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-			s.connect((peer, 4242))
+			s.connect((peer, 2424))
 			s.send(b'HashVal :::: null')
-			rmt_files = json.loads(s.recv(2048).encode('utf-8'))
+			try:
+				rmt_files = json.loads(s.recv(2048).encode('utf-8'))
+			except ValueError:
+				pass
 			for rf in rmt_files:
 				rhash = rmt_files[rf]
 				if rhash not in self.shares.values():
