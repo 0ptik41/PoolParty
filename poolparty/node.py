@@ -65,5 +65,3 @@ class Node:
 		except KeyboardInterrupt:
 			self.running = False
 			pass
-
-	def share_peers(self):
