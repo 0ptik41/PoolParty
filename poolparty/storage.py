@@ -26,7 +26,7 @@ def hashbins(hashval, nbins):
 def checksum(hstring):
 	total = 0
 	for l in list(hstring):
-		total += l
+		total += ord(l)
 	return total
 
 def distribute(file,nodes):
