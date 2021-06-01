@@ -26,6 +26,7 @@ class Server:
 					    'Update': self.update_code,
 					    'AddPeer': self.add_peer,
 					    'HashVal': self.give_hash}
+		self.node = Node()
 		self.start = time.time()
 		self.create_logfile()
 		self.inbound = port
@@ -34,7 +35,6 @@ class Server:
 		if os.path.isfile('.peers'):
 			for p in utils.load_peers():
 				self.pool.append(p)
-		self.node = Node(self.pool)
 		self.run()
 
 	def create_logfile(self):
@@ -53,7 +53,36 @@ class Server:
 		 	(self.sdate, self.stime))
 		self.running = False
 		return s
-	
+
+
+	def distribute_peer_list(self):
+		for node in self.pool:
+			other_nodes = []
+			random.shuffle(self.pool)
+			for other in self.pool:
+				time.sleep(np.random.randint(1,10,1)[0]/10)
+				if other != node:
+					print('[>] Telling %s about %s' % (node, other)) 
+					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
+					c.add_peer(other,node,4242)
+					 
+
+	def distribute_shares(self):
+		for peer in self.pool:
+			# check shares and distribute them
+			peer_files = c.list_files(peer, 4242).split('\n')
+			print('[-] %s has %d shares' % (peer, len(peer_files)))
+			# TODO: this kinda goes absolutely nuts though lololol 
+			time.sleep(np.random.randint(3,20,1)[0]/10)
+			theirs = []
+			for f in peer_files:
+					theirs.append(c.file_hash(f,peer,4242))
+			for myf in self.node.shares.keys():
+				if self.node.shares[myf] not in theirs:
+					time.sleep(np.random.randint(1,10,1)[0]/10)
+					s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+					s.send(myf,peer,4242)
+					s.close()
 
 	def run(self):
 		sock = utils.create_listener(self.inbound)
@@ -71,20 +100,20 @@ class Server:
 					# handle clients
 					client = self.client_handler(client,info)
 					# update shares 
+					jitter = np.random.randint(1,10,1)[0]/10
+					time.sleep(jitter) 
 					self.node.update_shares()
-					
+					# query peers occassionally 
+					if iteration > 0 and iteration%int(1+jitter)==0:
+						self.distribute_shares()
+
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
-					try:
-						client.close()
-					except:
-						continue
 					pass
 				iteration += 1
 		except KeyboardInterrupt:
 			self.shutdown([],[],)
 			pass
-
 
 	def recv_file(self, sock, args):
 		fname = args[0].replace('./','').split('/')[-1]
@@ -195,12 +224,10 @@ class Server:
 					print('Unknown request: %s' % raw_request)
 			except IndexError:
 				print('[!] Malformed API Request')
-				client.close()
 				pass
 			
 		except:
 			print('Bad Request: %s' % raw_request)
 			client.send(b'[!] Unable to process request')
 			client.close()
-		return client
-
+			pass
