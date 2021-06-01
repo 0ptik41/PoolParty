@@ -1,3 +1,4 @@
+import client as cl
 import socket
 import string 
 import random

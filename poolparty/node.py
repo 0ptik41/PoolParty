@@ -1,4 +1,6 @@
 from threading import Thread
+import client as cl
+import storage
 import socket
 import utils 
 import json
@@ -111,6 +113,9 @@ class Node:
 				rhash = rmt_files[rf]
 				if rhash not in self.shares.values():
 					print('[o] %s has a file I dont [%s]'%(peer,rf))
+			for file in self.shares.keys():
+				recipient = storage.distribute(file, self.pool)
+				cl.send_file(file, recipient, 4242)
 			s.close()
 
 	def handler(self, c, i):
