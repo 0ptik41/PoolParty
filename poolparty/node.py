@@ -14,9 +14,9 @@ class Node:
 		self.running = True
 		# get file hashes of shares 
 		self.shares = self.setup_shares()
-		self.serve = Thread(self.run_backend, ())
-		self.serve.setDaemon(True)
-		self.serve.start()
+		serve = Thread(target=self.run_backend, args=(,))
+		serve.setDaemon(True)
+		serve.start()
 
 	def check_memory(self):
 		free_mem = utils.cmd('free --kilo',False)
