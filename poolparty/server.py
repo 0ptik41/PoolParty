@@ -91,7 +91,7 @@ class Server:
 					self.distribute_peer_list()
 					self.node.distribute_shared_files()
 
-					if iterations >1 and iteration%5==0:
+					if iteration >1 and iteration%5==0:
 						# check memory usage of other nodes and if they arent
 						# able to be connected to, remove from pool
 						for peer in self.pool:
