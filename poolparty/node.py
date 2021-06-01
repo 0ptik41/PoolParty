@@ -103,7 +103,7 @@ class Node:
 			s.connect((peer, 2424))
 			s.send(b'HashVal :::: null')
 			try:
-				rmt_files = json.loads(s.recv(2048).encode('utf-8'))
+				rmt_files = json.loads(s.recv(2048))
 			except ValueError:
 				rmt_files = {}
 				pass
