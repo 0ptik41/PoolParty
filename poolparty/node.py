@@ -91,7 +91,7 @@ class Node:
 		return sock
 
 	def hashdump(self, sock, args):
-		hdata = json.dump(self.shares).encode('utf-8')
+		hdata = json.dump(self.shares).decode('utf-8')
 		sock.send(b'%s' % hdata)
 		return sock
 
