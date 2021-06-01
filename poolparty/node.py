@@ -8,9 +8,9 @@ import os
 class Node:
 	backend = 2424
 	def __init__(self, nodes):
-		self.actions = {'SharePeers': self.share_peers,
-						'ShareFiles': self.share_files,
-						}
+		self.actions = {}
+		# 'SharePeers': self.share_peers,
+		# 				'ShareFiles': self.share_files,
 		self.peers = nodes
 		self.memory = self.check_memory()
 		self.hostname = os.getlogin()
