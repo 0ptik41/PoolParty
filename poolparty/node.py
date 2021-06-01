@@ -57,8 +57,8 @@ class Node:
 		print('[-] %d shared files ' % len(self.shares.keys()))
 
 	def run_backend(self):
-		print('[-] Backend Server Listening on 0.0.0.0:%d'%self.backend)
-		s = utils.create_listener(self.backend)
+		print('[-] Backend Server Listening on 0.0.0.0:%d'%self.inbound)
+		s = utils.create_listener(self.inbound)
 		iteration = 0
 		try:
 			while self.running:
