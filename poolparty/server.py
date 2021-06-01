@@ -63,8 +63,8 @@ class Server:
 				time.sleep(np.random.randint(1,10,1)[0]/10)
 				if other != node:
 					print('[>] Telling %s about %s' % (node, other)) 
-					Thread(target=c.add_peer, args=(other, node, 4242)).start()
-					# c.add_peer(other,node,4242)
+					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
+					c.add_peer(other,node,4242)
 					 
 
 	def distribute_shares(self):
@@ -102,8 +102,8 @@ class Server:
 					time.sleep(jitter) 
 					self.node.update_shares()
 					# query peers occassionally 
-					if iteration > 0 and iteration%int(1+jitter*10)==0:
-						self.distribute_shares()
+					# if iteration > 0 and iteration%int(1+jitter*10)==0:
+					# 	self.distribute_shares()
 
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
@@ -119,7 +119,6 @@ class Server:
 
 	def recv_file(self, sock, args):
 		fname = args[0].replace('./','').split('/')[-1]
-		print(fname)
 		npackets = int(args[1])
 		if not os.path.isdir('received'):
 			os.mkdir('received')
@@ -155,7 +154,7 @@ class Server:
 		if fname not in self.node.shares.keys():
 			hdata = json.dumps(self.node.shares).encode('utf-8')
 			sock.send(b'[x] Unknown File. Here are my hashes:\n'+hdata)
-			print(self.node.shares)
+			print(self.node.shares.values())
 		else:
 			print(self.node.shares[fname])
 			sock.send(bytes(self.node.shares[fname]))
