@@ -66,7 +66,7 @@ class Server:
 					print('[>] Telling %s about %s' % (node, other)) 
 					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
 					try:
-						c.add_peer(other,node,2424)
+						c.add_peer(other,node,4242)
 					except socket.error:
 						print('[!] Error adding peer')
 						pass
