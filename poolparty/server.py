@@ -89,7 +89,7 @@ class Server:
 					# update shares 
 					jitter = np.random.randint(1,10,1)[0]/10
 					time.sleep(jitter) 
-					if iteration > 1 and iteration%5==0;
+					if iteration > 1 and iteration%5==0:
 						self.node.update_shares()
 						# Inform other nodes about known nodes 
 						self.distribute_peer_list()
