@@ -89,7 +89,7 @@ class Server:
 					client.close()
 					# update shares 
 					self.distribute_peer_list()
-					
+					self.node.distribute_shared_files()
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
 					pass

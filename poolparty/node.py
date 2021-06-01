@@ -68,6 +68,9 @@ class Node:
 					c, i = s.accept()
 					c = self.handler(c,i)
 					c.close()
+					# update shares 
+					self.shares = self.setup_shares()
+					# check if peers have the same shares
 				except socket.error:
 					print('[!!] Connection error with %s' % i)
 					pass
@@ -85,6 +88,24 @@ class Node:
 		else:
 			sock.send(b'[x] Peer is known')
 		return sock
+
+	def hashdump(self, sock, args):
+		hdata = json.dump(self.shares).encode('utf-8')
+		sock.send(b'%s' % hdata)
+		return sock
+
+	def distribute_shared_files(self):
+		for peer in self.pool:
+			# Get files from this peer
+			s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+			s.connect((peer, 4242))
+			s.send(b'HashVal :::: null')
+			rmt_files = json.loads(s.recv(2048).encode('utf-8'))
+			for rf in rmt_files:
+				rhash = rmt_files[rf]
+				if rhash not in self.shares.values():
+					print('[o] %s has a file I dont [%s]'%(peer,rf))
+			s.close()
 
 	def handler(self, c, i):
 		request = c.recv(1024).decode('utf-8')
