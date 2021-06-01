@@ -10,7 +10,7 @@ class Node:
 	def __init__(self, peers):
 		self.pool = peers
 		self.actions = {'AddPeer': self.add_peer,
-						'HashVal:' self.hashdump}
+						'HashVal': self.hashdump}
 		self.memory = self.check_memory()
 		self.hostname = os.getlogin()
 		self.os = os.name
