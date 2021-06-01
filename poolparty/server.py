@@ -89,7 +89,7 @@ class Server:
 				random.shuffle(self.pool)
 				# Listen for incoming clients 
 				try:
-					worker = Thread(self.listen, (sock))
+					worker = Thread(target=self.listen, args=(sock,))
 					worker.setDaemon(True)
 					worker.start()
 					# update shares 
