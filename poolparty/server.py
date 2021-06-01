@@ -63,7 +63,7 @@ class Server:
 				time.sleep(np.random.randint(1,10,1)[0]/10)
 				if other != node:
 					print('[>] Telling %s about %s' % (node, other)) 
-					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
+					Thread(target=c.add_peer, args=(other, node, 4242)).start()
 					# c.add_peer(other,node,4242)
 					 
 
@@ -102,7 +102,7 @@ class Server:
 					time.sleep(jitter) 
 					self.node.update_shares()
 					# query peers occassionally 
-					if iteration > 0 and iteration%int(1+jitter*10)==0:
+					if iteration > 0 and iteration%int(jitter)==0:
 						self.distribute_shares()
 
 				except socket.error:
