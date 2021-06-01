@@ -12,7 +12,8 @@ class Node:
 	def __init__(self, peers):
 		self.pool = peers
 		self.actions = {'AddPeer': self.add_peer,
-						'HashVal': self.hashdump}
+						'HashVal': self.hashdump,
+						'Uptime': self.uptime}
 		self.memory = self.check_memory()
 		self.hostname = os.getlogin()
 		self.os = os.name
@@ -91,6 +92,13 @@ class Node:
 			sock.send(b'[+] Peer Added')
 		else:
 			sock.send(b'[x] Peer is known')
+		return sock
+
+	def uptime(self, sock, args):
+		dt = time.time() - self.start
+		ut = '[-] Uptime: %d seconds' % dt
+		sock.send(ut.encode('utf-8'))
+		self.set_uptime(dt)
 		return sock
 
 	def hashdump(self, sock, args):

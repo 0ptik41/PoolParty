@@ -66,7 +66,7 @@ class Server:
 					print('[>] Telling %s about %s' % (node, other)) 
 					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
 					try:
-						c.add_peer(other,node,2424)
+						c.add_peer(other,node,4242)
 					except socket.error:
 						print('[!] Error adding peer')
 						pass
@@ -98,7 +98,10 @@ class Server:
 						# able to be connected to, remove from pool
 						for peer in self.pool:
 							try:
-								c.uptime(peer,4242)
+								s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+								s.connect((peer, 4242))
+								if not s.recv(1024).decode('utf-8').find('[-]'):
+									self.pool.remove(peer)
 							except socket.error:
 								print('[!] Unable to reach %s. Removing from pool' % peer)
 								self.pool.remove(peer)
