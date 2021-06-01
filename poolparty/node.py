@@ -74,7 +74,7 @@ class Node:
 			self.running = False
 			pass
 
-	def handler(self. c, i):
+	def handler(self, c, i):
 		request = c.recv(1024).decode('utf-8')
 		try:
 			api_req = request.split(' :::: ')[0]
