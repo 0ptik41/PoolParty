@@ -34,7 +34,7 @@ class Server:
 		if os.path.isfile('.peers'):
 			for p in utils.load_peers():
 				self.pool.append(p)
-		self.node = Node(self, self.pool)
+		self.node = Node(self.pool)
 		self.run()
 
 	def create_logfile(self):
