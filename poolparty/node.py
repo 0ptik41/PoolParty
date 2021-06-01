@@ -76,10 +76,10 @@ class Node:
 			self.running = False
 			pass
 
-	def share_peers(self):
+	# def share_peers(self):
 
 
-	def share_files(self):
+	# def share_files(self):
 
 def handler(node, addr, sock):
 	try:
