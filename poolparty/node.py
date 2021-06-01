@@ -7,6 +7,8 @@ import os
 class Node:
 	inbound = 2424
 	def __init__(self, peers):
+		self.pool = peers
+		self.actions = {'AddPeer': self.add_peer}
 		self.memory = self.check_memory()
 		self.hostname = os.getlogin()
 		self.os = os.name
@@ -73,6 +75,16 @@ class Node:
 		except KeyboardInterrupt:
 			self.running = False
 			pass
+
+	def add_peer(self, sock, args):
+		addr = args[0]
+		if addr not  in self.pool:
+			self.pool.append(addr)
+			print('[+] Added peer %s' % addr)
+			sock.send(b'[+] Peer Added')
+		else:
+			sock.send(b'[x] Peer is known')
+		return sock
 
 	def handler(self, c, i):
 		request = c.recv(1024).decode('utf-8')

@@ -88,7 +88,7 @@ class Server:
 					client = self.client_handler(client,info)
 					client.close()
 					# update shares 
-					
+					self.distribute_peer_list()
 					
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
@@ -188,7 +188,7 @@ class Server:
 			print('[+] Adding %s to pool' % addr)
 			sock.send(b'[+] Peer Added')
 		else:
-			sock.send(b'[x] Not Added')
+			sock.send(b'[x] Peer Known')
 		return sock
 
 	def client_handler(self, client, info):
