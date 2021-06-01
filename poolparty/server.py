@@ -26,7 +26,6 @@ class Server:
 					    'Update': self.update_code,
 					    'AddPeer': self.add_peer,
 					    'HashVal': self.give_hash}
-		self.node = Node()
 		self.start = time.time()
 		self.create_logfile()
 		self.inbound = port
@@ -35,6 +34,7 @@ class Server:
 		if os.path.isfile('.peers'):
 			for p in utils.load_peers():
 				self.pool.append(p)
+		self.node = Node(self.pool)
 		self.run()
 
 	def create_logfile(self):
