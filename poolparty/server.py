@@ -70,7 +70,13 @@ class Server:
 					except socket.error:
 						print('[!] Error adding peer')
 						pass
-					 
+	
+	def listen(self,sock):
+		client, info = sock.accept()
+		# handle clients
+		client = self.client_handler(client,info)
+		client.close()
+
 
 	def run(self):
 		sock = utils.create_listener(self.inbound)
@@ -83,10 +89,9 @@ class Server:
 				random.shuffle(self.pool)
 				# Listen for incoming clients 
 				try:
-					client, info = sock.accept()
-					# handle clients
-					client = self.client_handler(client,info)
-					client.close()
+					worker = Thread(self.listen, (sock))
+					worker.setDaemon(True)
+					worker.start()
 					# update shares 
 					self.distribute_peer_list()
 					self.node.distribute_shared_files()
@@ -106,10 +111,8 @@ class Server:
 					print('[!] Connection Error with %s' % info[0])
 					pass
 				iteration += 1
-			sock.close()
 		except KeyboardInterrupt:
 			self.shutdown([],[],)
-			sock.close()
 			pass
 
 	def recv_file(self, sock, args):
