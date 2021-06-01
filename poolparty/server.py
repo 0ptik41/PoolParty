@@ -66,7 +66,7 @@ class Server:
 					print('[>] Telling %s about %s' % (node, other)) 
 					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
 					try:
-						c.add_peer(other,node,4242)
+						c.add_peer(other,node,2424)
 					except socket.error:
 						print('[!] Error adding peer')
 						pass
@@ -86,20 +86,18 @@ class Server:
 					client, info = sock.accept()
 					# handle clients
 					client = self.client_handler(client,info)
+					client.close()
 					# update shares 
-					jitter = np.random.randint(1,10,1)[0]/10
-					time.sleep(jitter) 
-					if iteration > 1 and int(time.time()-self.start)%5==0:
-						self.node.update_shares()
-						# Inform other nodes about known nodes 
-						self.distribute_peer_list()
+					
 					
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
 					pass
 				iteration += 1
+			sock.close()
 		except KeyboardInterrupt:
 			self.shutdown([],[],)
+			sock.close()
 			pass
 
 	def recv_file(self, sock, args):
@@ -203,7 +201,6 @@ class Server:
 				params = raw_request.split(' :::: ')[1].split(',')
 				if api_fc in self.actions.keys():
 					client = self.actions[api_fc](client, params)
-					client.close()
 					# successful api actions get this client added as peer
 					self.pool.append(info[0])
 					self.pool = list(set(self.pool))
@@ -216,5 +213,5 @@ class Server:
 		except:
 			print('Bad Request: %s' % raw_request)
 			client.send(b'[!] Unable to process request')
-			client.close()
 			pass
+		return client

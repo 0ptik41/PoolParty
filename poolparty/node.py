@@ -5,15 +5,18 @@ import time
 import os 
 
 class Node:
-	backend = 2424
+	inbound = 2424
 	def __init__(self, peers):
 		self.memory = self.check_memory()
 		self.hostname = os.getlogin()
 		self.os = os.name
 		self.uptime = 0.0
 		self.running = True
-		# get file hashes of all shares 
+		# get file hashes of shares 
 		self.shares = self.setup_shares()
+		self.serve = Thread(self.run_backend, ())
+		self.serve.setDaemon(True)
+		self.serve.start()
 
 	def check_memory(self):
 		free_mem = utils.cmd('free --kilo',False)
@@ -56,12 +59,28 @@ class Node:
 	def run_backend(self):
 		print('[-] Backend Server Listening on 0.0.0.0:%d'%self.backend)
 		s = utils.create_listener(self.backend)
+		iteration = 0
 		try:
 			while self.running:
-				c, i = s.accept()
-
-				c.close()
-
+				try:
+					c, i = s.accept()
+					c = self.handler(c,i)
+					c.close()
+				except socket.error:
+					print('[!!] Connection error with %s' % i)
+					pass
+				iteration += 1
 		except KeyboardInterrupt:
 			self.running = False
 			pass
+
+	def handler(self. c, i):
+		request = c.recv(1024).decode('utf-8')
+		try:
+			api_req = request.split(' :::: ')[0]
+			params = request.split(' :::: ')[1].split(',')
+			if api_req in self.actions.keys():
+				c = self.actions[api_req](c, params)
+		except IndexError:
+			pass
+		return c
