@@ -56,12 +56,13 @@ class Server:
 
 
 	def distribute_peer_list(self):
+		mine = utils.cmd('hostname -I',False).pop().split(' ')[0]
 		for node in self.pool:
 			other_nodes = []
 			random.shuffle(self.pool)
 			for other in self.pool:
 				time.sleep(np.random.randint(1,10,1)[0]/10)
-				if other != node:
+				if other != node and node != mine:
 					print('[>] Telling %s about %s' % (node, other)) 
 					# Thread(target=c.add_peer, args=(other, node, 4242)).start()
 					try:
