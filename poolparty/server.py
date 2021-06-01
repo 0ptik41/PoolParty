@@ -69,7 +69,6 @@ class Server:
 
 	def distribute_shares(self):
 		for peer in self.pool:
-							
 			# check shares and distribute them
 			peer_files = c.list_files(peer, 4242).split('\n')
 			print('[-] %s has %d shares' % (peer, len(peer_files)))
@@ -80,6 +79,7 @@ class Server:
 					theirs.append(c.file_hash(f,peer,4242))
 			for myf in self.node.shares.keys():
 				if self.node.shares[myf] not in theirs:
+					time.sleep(np.random.randint(1,10,1)[0]/10)
 					c.send(myf,peer,4242)
 
 	def run(self):
