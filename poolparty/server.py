@@ -108,7 +108,6 @@ class Server:
 
 
 				except socket.error:
-					print('[!] Connection Error with %s' % info[0])
 					pass
 				iteration += 1
 		except KeyboardInterrupt:
