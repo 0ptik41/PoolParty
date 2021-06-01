@@ -90,6 +90,18 @@ class Server:
 					# update shares 
 					self.distribute_peer_list()
 					self.node.distribute_shared_files()
+
+					if (time.time() -self.start) > 10 and iteration%5==0:
+						# check memory usage of other nodes and if they arent
+						# able to be connected to, remove from pool
+						for peer in self.pool:
+							try:
+								c.uptime(peer,4242)
+							except socket.error:
+								print('[!] Unable to reach %s. Removing from pool' % peer)
+								self.pool.remove(peer)
+
+
 				except socket.error:
 					print('[!] Connection Error with %s' % info[0])
 					pass
