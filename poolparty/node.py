@@ -1,17 +1,27 @@
+from threading import Thread
+import multiprocessing
 import utils 
 import json
 import time 
 import os 
 
 class Node:
-	
-	def __init__(self):
+	backend = 2424
+	def __init__(self, nodes):
+		self.actions = {'SharePeers': self.share_peers,
+						'ShareFiles': self.share_files,
+						}
+		self.peers = nodes
 		self.memory = self.check_memory()
 		self.hostname = os.getlogin()
 		self.os = os.name
 		self.uptime = 0.0
+		self.running = True
 		# get file hashes of all shares 
 		self.shares = self.setup_shares()
+		# self.listener = Thread(target=self.run_backend,())
+		# self.listener.setDaemon(True)
+		# self.listener.start()
 
 	def check_memory(self):
 		free_mem = utils.cmd('free --kilo',False)
@@ -51,4 +61,36 @@ class Node:
 		self.shares = self.setup_shares()
 		print('[-] %d shared files ' % len(self.shares.keys()))
 
-	
+	def run_backend(self):
+		print('[-] Backend Server Listening on 0.0.0.0:%d'%self.backend)
+		s = utils.create_listener(self.backend)
+		workers = multiprocessing.Pool(10)
+		try:
+			while self.running:
+				c, i = s.accept()
+				# ALL API Methods MUST Clost the Client Socket!
+				event = workers.apply_async(handler, (self,i,c))
+				result = event.get(timeout=10)
+
+		except KeyboardInterrupt:
+			self.running = False
+			pass
+
+	def share_peers(self):
+
+
+	def share_files(self):
+
+def handler(node, addr, sock):
+	try:
+		raw_request = client.recv(1024).decode('utf-8')
+		try:
+			api = raw_request.split(' :::: ')[0]
+			params = raw_request.split(' :::: ')[1].split(',')
+		except IndexError:
+			print('[!] Bad Api Request')
+			client.close()
+			pass
+	except socket.error:
+		print('[*] Connection error with %s:%d', (addr[0],addr[1]))
+		pass
