@@ -26,7 +26,10 @@ def hashbins(hashval, nbins):
 def checksum(hstring):
 	total = 0
 	for l in list(hstring):
-		total += ord(l)
+		if type(l)==str:
+			total += ord(l)
+		elif type(l)==int:
+			total += l
 	return total
 
 def distribute(file,nodes):
